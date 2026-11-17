@@ -819,16 +819,6 @@ function exibirFeedbackCopia() {
   btn.classList.add("copiado");
   
   showToast(`✅ Código PIX de ${valorFormatado} copiado com sucesso!`);
-  
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(880, ctx.currentTime);
-    osc.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + 0.1);
-  } catch(e) {}
 
   setTimeout(() => {
     btn.textContent = "📋 Copiar código PIX";
