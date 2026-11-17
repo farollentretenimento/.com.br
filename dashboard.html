@@ -622,7 +622,7 @@ async function iniciarPainel() {
   carregarPixConfig();
   ouvirPedidos();
   ouvirVisitas();
-  ouvirNotificacoes(); // <-- INICIA AS NOTIFICAÇÕES
+  ouvirNotificacoes();
   inicializarGraficos();
 
   if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
