@@ -414,23 +414,23 @@ const db = firebase.database();
 })();
 
 // ============================================================
-// CUPONS E PRODUTOS
+// CUPONS E PRODUTOS (Imagens Corrigidas e Diretas)
 // ============================================================
 const CUPONS = {"FAROL10":0.10,"BEMVINDO15":0.15,"FAROL20":0.20};
 
 const produtos = [
-  {id:963,nome:"Gift Card MENSAL",cat:"Mensal",de:29.90,por:21.99,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/unitv-mensal-farol-510x707.png",cor:"#555"},
-  {id:965,nome:"Gift Card Trimestral",cat:"Trimestral",de:79.90,por:65.90,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/unitv-trimestral-farol-510x707.png",cor:"#555"},
-  {id:967,nome:"Gift Card Anual",cat:"Anual",de:199.90,por:165.90,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/unitv-anual-play-recargas-510x707.png",cor:"#555"},
-  {id:8274,nome:"Gift Card TV+EXPRESS – mensal",cat:"Mensal",de:30.00,por:22.90,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tve-mensal-1-510x707.png",cor:"#0f2b5c"},
-  {id:8273,nome:"Gift Card TV+EXPRESS- trimestral",cat:"Trimestral",de:75.00,por:59.90,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tve-trimestral-510x707.png",cor:"#0f2b5c"},
-  {id:1635,nome:"Gift Card TV+EXPRESS – Anual",cat:"Anual",de:180.00,por:150.98,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tve-anual-510x707.png",cor:"#0f2b5c"},
-  {id:972,nome:"Gift Card Eppi / flixx cine – Mensal",cat:"Mensal",de:null,por:19.98,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/eppi-mensal-1.png",cor:"#007f3d"},
-  {id:1452,nome:"Gift Card Eppi / flixx cine – Trimestral",cat:"Trimestral",de:65.00,por:59.99,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/eppi-trimestral-1.png",cor:"#007f3d"},
-  {id:8276,nome:"Gift Card Eppi / flixx cine – Anual",cat:"Anual",de:null,por:129.98,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/eppi-anual-1.png",cor:"#007f3d"},
+  {id:963,nome:"Gift Card MENSAL",cat:"Mensal",de:29.90,por:21.99,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/unitv-mensal-farol-247x343.png",cor:"#555"},
+  {id:965,nome:"Gift Card Trimestral",cat:"Trimestral",de:79.90,por:65.90,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/unitv-trimestral-farol-247x343.png",cor:"#555"},
+  {id:967,nome:"Gift Card Anual",cat:"Anual",de:199.90,por:165.90,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/unitv-anual-play-recargas-247x343.png",cor:"#555"},
+  {id:8274,nome:"Gift Card TV+EXPRESS – mensal",cat:"Mensal",de:30.00,por:22.90,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tve-mensal-1-247x343.png",cor:"#0f2b5c"},
+  {id:8273,nome:"Gift Card TV+EXPRESS- trimestral",cat:"Trimestral",de:75.00,por:59.90,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tve-trimestral-247x343.png",cor:"#0f2b5c"},
+  {id:1635,nome:"Gift Card TV+EXPRESS – Anual",cat:"Anual",de:180.00,por:150.98,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tve-anual-247x343.png",cor:"#0f2b5c"},
+  {id:972,nome:"Gift Card Eppi / flixx cine – Mensal",cat:"Mensal",de:null,por:19.98,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/eppi-mensal-1-247x343.png",cor:"#007f3d"},
+  {id:1452,nome:"Gift Card Eppi / flixx cine – Trimestral",cat:"Trimestral",de:65.00,por:59.99,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/eppi-trimestral-247x343.png",cor:"#007f3d"},
+  {id:8276,nome:"Gift Card Eppi / flixx cine – Anual",cat:"Anual",de:null,por:129.98,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/eppi-anual-1-247x343.png",cor:"#007f3d"},
   {id:1629,nome:"Gift Card nexaTV – Mensal",cat:"Mensal",de:null,por:22.98,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tvexpress-mensal.png",cor:"#4a0cb0"},
   {id:1628,nome:"Gift Card nexa tv/ TVE – Anual",cat:"Anual",de:null,por:150.98,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tvexpress-anual-1.png",cor:"#4a0cb0"},
-  {id:1630,nome:"Gift Card nexa tv / TVE – trimestral",cat:"Trimestral",de:null,por:59.98,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tvexpress-trimestral.png",cor:"#4a0cb0"}
+  {id:1630,nome:"Gift Card nexa tv / TVE – trimestral",cat:"Trimestral",de:null,por:59.98,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tvexpress-mensal.png",cor:"#4a0cb0"} // Usando imagem do mensal como fallback temporário
 ];
 
 const brl = n => "R$ " + n.toFixed(2).replace(".", ",");
