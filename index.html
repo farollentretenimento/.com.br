@@ -741,6 +741,9 @@ async function finalizarCompra(e) {
     };
 
     await db.ref(`buser_pedidos/${telLimpo}/pix/${txid}`).set(pedidoObj);
+    
+    // NOTIFICA O PAINEL QUE O PIX FOI GERADO
+    db.ref('farol_notificacoes').push({ tipo: 'pix_gerado', txid: txid, valor: totalFinal, data: Date.now() });
 
     document.getElementById("pixOrderNum").textContent = txid;
     document.getElementById("pixOrderNum2").textContent = txid;
@@ -749,7 +752,6 @@ async function finalizarCompra(e) {
     document.getElementById("pixQrBox").innerHTML = "";
     new QRCode(document.getElementById("pixQrBox"), { text: payload, width: 200, height: 200 });
     
-    // Reseta o botão de copiar
     const btnCopy = document.getElementById("btnCopiarPix");
     btnCopy.textContent = "📋 Copiar código PIX";
     btnCopy.classList.remove("copiado");
@@ -775,27 +777,24 @@ async function finalizarCompra(e) {
 // FUNÇÕES PIX E UTILS
 // ============================================================
 
-// Função principal de cópia
 function copiarPix(){
   if(!pixAtual) return;
   
-  // Tenta copiar de forma moderna
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(pixAtual.payload).then(() => {
       exibirFeedbackCopia();
     }).catch(err => {
-      copiarFallback(); // Se o navegador bloquear, usa o método antigo
+      copiarFallback();
     });
   } else {
     copiarFallback();
   }
 }
 
-// Função para navegadores antigos ou que bloqueiam a cópia
 function copiarFallback() {
   const textArea = document.createElement("textarea");
   textArea.value = pixAtual.payload;
-  textArea.style.position = "fixed"; // Evita rolar a tela
+  textArea.style.position = "fixed";
   textArea.style.opacity = "0";
   document.body.appendChild(textArea);
   textArea.focus();
@@ -804,21 +803,23 @@ function copiarFallback() {
     document.execCommand('copy');
     exibirFeedbackCopia();
   } catch (err) {
-    showToast("Não foi possível copiar automaticamente. Selecione o código e copie manualmente.");
+    showToast("Não foi possível copiar automaticamente.");
   }
   document.body.removeChild(textArea);
 }
 
-// Função que mostra o botão verde e o valor copiado
 function exibirFeedbackCopia() {
   const btn = document.getElementById("btnCopiarPix");
   const valorFormatado = brl(pixAtual.valor);
   
-  // Muda o botão para verde e mostra o valor
+  // NOTIFICA O PAINEL QUE O PIX FOI COPIADO
+  db.ref('farol_notificacoes').push({ tipo: 'pix_copiado', txid: pixAtual.orderNum, valor: pixAtual.valor, data: Date.now() });
+
   btn.textContent = `✅ Copiado: ${valorFormatado}`;
   btn.classList.add("copiado");
   
-  // Toca um som de sucesso
+  showToast(`✅ Código PIX de ${valorFormatado} copiado com sucesso!`);
+  
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     const osc = ctx.createOscillator();
@@ -829,7 +830,6 @@ function exibirFeedbackCopia() {
     osc.stop(ctx.currentTime + 0.1);
   } catch(e) {}
 
-  // Volta ao normal depois de 4 segundos
   setTimeout(() => {
     btn.textContent = "📋 Copiar código PIX";
     btn.classList.remove("copiado");
