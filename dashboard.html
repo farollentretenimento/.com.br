@@ -523,7 +523,6 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 const auth = firebase.auth();
 
-// ⚠️ SEU E-MAIL DE LOGIN AQUI
 const EMAIL_ADMIN = "trampfinaldeano@gmail.com";
 
 let pedidosCache = [];
@@ -584,14 +583,13 @@ document.getElementById('login-senha').addEventListener('keypress', e => {
   if (e.key === 'Enter') fazerLogin();
 });
 
-// Monitor de autenticação
 auth.onAuthStateChanged(user => {
   const loginScreen = document.getElementById('login-screen');
   const adminPanel = document.getElementById('admin-panel');
 
   if (user) {
     if (EMAIL_ADMIN && user.email !== EMAIL_ADMIN) {
-      alert('Você não tem permissão de administrador. Use o e-mail correto.');
+      alert('Você não tem permissão de administrador.');
       auth.signOut();
       return;
     }
@@ -624,6 +622,7 @@ async function iniciarPainel() {
   carregarPixConfig();
   ouvirPedidos();
   ouvirVisitas();
+  ouvirNotificacoes(); // <-- INICIA AS NOTIFICAÇÕES
   inicializarGraficos();
 
   if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
@@ -632,10 +631,78 @@ async function iniciarPainel() {
 }
 
 // ============================================================
+// NOTIFICAÇÕES EM TEMPO REAL (GERADO E COPIADO)
+// ============================================================
+function ouvirNotificacoes() {
+  let primeiraNotificacao = true;
+  const ref = db.ref('farol_notificacoes');
+  const umDiaAtras = Date.now() - (24 * 60 * 60 * 1000);
+  
+  ref.orderByChild('data').endAt(umDiaAtras).once('value', snap => {
+    if(snap.exists()) {
+      const updates = {};
+      snap.forEach(child => { updates[child.key] = null; });
+      ref.update(updates);
+    }
+  });
+
+  ref.on('child_added', snap => {
+    if (primeiraNotificacao) { primeiraNotificacao = false; return; }
+    
+    const n = snap.val();
+    const valorReais = formatarReais(n.valor);
+    
+    if (n.tipo === 'pix_gerado') {
+      tocarAlerta('gerado');
+      mostrarToast(`🚨 PIX GERADO: Pedido #${n.txid} no valor de ${valorReais}`, 'success');
+      
+      if (Notification.permission === "granted") {
+        new Notification("🚨 PIX Gerado!", { body: `Pedido #${n.txid}\nValor: ${valorReais}` });
+      }
+    } 
+    else if (n.tipo === 'pix_copiado') {
+      tocarAlerta('copiado');
+      mostrarToast(`📋 PIX COPIADO: Pedido #${n.txid} no valor de ${valorReais}`, 'info');
+      
+      if (Notification.permission === "granted") {
+        new Notification("📋 Cliente copiou o PIX!", { body: `Pedido #${n.txid}\nValor: ${valorReais}` });
+      }
+    }
+  });
+}
+
+function tocarAlerta(tipo) {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    
+    if (tipo === 'gerado') {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(880, ctx.currentTime);
+      osc.frequency.setValueAtTime(1100, ctx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.5, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.5);
+    } else {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(600, ctx.currentTime);
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.2);
+    }
+  } catch(e) { console.log('Áudio bloqueado pelo navegador'); }
+}
+
+// ============================================================
 // PEDIDOS
 // ============================================================
 function ouvirPedidos() {
-  // ⚠️ O PAINEL AGORA LÊ DE 'buser_pedidos' (ONDE A LOJA SALVA)
   db.ref('buser_pedidos').on('value', snap => {
     pedidosCache = [];
     snap.forEach(clienteSnap => {
@@ -644,7 +711,7 @@ function ouvirPedidos() {
           areaSnap.forEach(pedidoSnap => {
             const p = pedidoSnap.val();
             if (p && p.txid) {
-              p.txid = pedidoSnap.key; // Garante que o ID esteja no objeto
+              p.txid = pedidoSnap.key;
               pedidosCache.push(p);
             }
           });
@@ -657,15 +724,6 @@ function ouvirPedidos() {
     renderizarPedidos();
     processarClientes();
     atualizarGraficos();
-
-    if (!primeiraCarga) {
-      tocarNotificacao();
-      mostrarToast('Novo pedido recebido!', 'success');
-      if (Notification.permission === "granted") {
-        new Notification("🚀 Nova Venda Farol!", { body: "Um novo PIX foi gerado. Verifique o painel." });
-      }
-    }
-    primeiraCarga = false;
   }, err => {
     console.error('Erro ao ouvir pedidos:', err);
     mostrarToast('Erro de leitura no banco. Verifique as regras.', 'error');
@@ -850,6 +908,7 @@ async function limparTUDO() {
   try {
     await db.ref('buser_pedidos').remove();
     await db.ref('farol_visitas').remove();
+    await db.ref('farol_notificacoes').remove();
     mostrarToast('TODOS os dados foram apagados!', 'success');
   } catch(e) {
     console.error(e);
