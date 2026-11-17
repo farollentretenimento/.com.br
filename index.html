@@ -169,7 +169,6 @@ button{font-family:'Lato',sans-serif;cursor:pointer;}
 .btn-checkout-final:hover{background:#1eb857;}
 .erro-msg{color:var(--danger);font-size:11px;font-weight:700;margin-top:4px;display:block;}
 
-/* TELA PIX */
 .pix-screen{display:none;background:#f9f9f9;min-height:80vh;padding:40px 20px;}
 .pix-screen.active{display:block;}
 .pix-content{max-width:600px;margin:0 auto;background:#fff;padding:35px 30px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.05);text-align:center;}
@@ -331,7 +330,6 @@ button{font-family:'Lato',sans-serif;cursor:pointer;}
   </div>
 </div>
 
-<!-- TELA PIX -->
 <div class="pix-screen" id="pixScreen">
   <div class="pix-content">
     <div class="pix-success-icon">✓</div>
@@ -373,7 +371,7 @@ button{font-family:'Lato',sans-serif;cursor:pointer;}
 
 <script>
 // ============================================================
-// FIREBASE
+// CONFIG FIREBASE
 // ============================================================
 const firebaseConfig = {
   apiKey: "AIzaSyCmoxq5NMQUj1hqyWhjaJz4Uw4grhsFFhA",
@@ -427,12 +425,12 @@ const produtos = [
   {id:8274,nome:"Gift Card TV+EXPRESS – mensal",cat:"Mensal",de:30.00,por:22.90,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tve-mensal-1-510x707.png",cor:"#0f2b5c"},
   {id:8273,nome:"Gift Card TV+EXPRESS- trimestral",cat:"Trimestral",de:75.00,por:59.90,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tve-trimestral-510x707.png",cor:"#0f2b5c"},
   {id:1635,nome:"Gift Card TV+EXPRESS – Anual",cat:"Anual",de:180.00,por:150.98,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tve-anual-510x707.png",cor:"#0f2b5c"},
-  {id:972,nome:"Gift Card Eppi / flixx cine – Mensal",cat:"Mensal",de:null,por:19.98,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/eppi-mensal-1-510x707.png",cor:"#007f3d"},
-  {id:1452,nome:"Gift Card Eppi / flixx cine – Trimestral",cat:"Trimestral",de:65.00,por:59.99,img:"",cor:"#007f3d"},
-  {id:8276,nome:"Gift Card Eppi / flixx cine – Anual",cat:"Anual",de:null,por:129.98,img:"",cor:"#007f3d"},
-  {id:1629,nome:"Gift Card nexaTV – Mensal",cat:"Mensal",de:null,por:22.98,img:"",cor:"#4a0cb0"},
-  {id:1628,nome:"Gift Card nexa tv/ TVE – Anual",cat:"Anual",de:null,por:150.98,img:"",cor:"#4a0cb0"},
-  {id:1630,nome:"Gift Card nexa tv / TVE – trimestral",cat:"Trimestral",de:null,por:59.98,img:"",cor:"#4a0cb0"}
+  {id:972,nome:"Gift Card Eppi / flixx cine – Mensal",cat:"Mensal",de:null,por:19.98,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/eppi-mensal-1.png",cor:"#007f3d"},
+  {id:1452,nome:"Gift Card Eppi / flixx cine – Trimestral",cat:"Trimestral",de:65.00,por:59.99,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/eppi-trimestral-1.png",cor:"#007f3d"},
+  {id:8276,nome:"Gift Card Eppi / flixx cine – Anual",cat:"Anual",de:null,por:129.98,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/eppi-anual-1.png",cor:"#007f3d"},
+  {id:1629,nome:"Gift Card nexaTV – Mensal",cat:"Mensal",de:null,por:22.98,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tvexpress-mensal.png",cor:"#4a0cb0"},
+  {id:1628,nome:"Gift Card nexa tv/ TVE – Anual",cat:"Anual",de:null,por:150.98,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tvexpress-anual-1.png",cor:"#4a0cb0"},
+  {id:1630,nome:"Gift Card nexa tv / TVE – trimestral",cat:"Trimestral",de:null,por:59.98,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tvexpress-trimestral.png",cor:"#4a0cb0"}
 ];
 
 const brl = n => "R$ " + n.toFixed(2).replace(".", ",");
@@ -750,7 +748,6 @@ async function finalizarCompra(e){
   const totalFinal = subtotal * (1 - descontoAtual);
   const telLimpo = telefone.replace(/\D/g, '');
 
-  // Busca configuração PIX do admin
   let pixCfg;
   try {
     const snap = await db.ref('buser_pix_cfg').once('value');
@@ -759,11 +756,10 @@ async function finalizarCompra(e){
     console.error('Erro ao buscar config PIX', e);
   }
   if(!pixCfg || !pixCfg.key){
-    showToast('Loja temporariamente indisponível. Tente novamente em alguns minutos.', 'error');
+    showToast('Loja indisponível. Tente novamente em minutos.', 'error');
     return;
   }
 
-  // Gera payload PIX
   const payload = gerarPayloadPix({
     key: pixCfg.key,
     name: pixCfg.name || 'FAROL',
@@ -774,7 +770,6 @@ async function finalizarCompra(e){
 
   pixAtual = { payload, valor: totalFinal, txid: orderNum, telLimpo };
 
-  // Salva pedido no Firebase com dados completos
   const pedido = {
     txid: orderNum.toString(),
     nome: nome + " " + sobrenome,
@@ -809,10 +804,8 @@ async function finalizarCompra(e){
     return;
   }
 
-  // Mostra tela PIX
   mostrarTelaPix(payload, totalFinal, orderNum);
 
-  // Limpa carrinho
   carrinho = {};
   descontoAtual = 0;
   cupomAplicado = "";
@@ -845,7 +838,6 @@ async function copiarPix(){
     document.getElementById("btnCopiarPix").classList.add("copiado");
     showToast("Código PIX copiado!");
 
-    // Registra no Firebase
     try {
       await db.ref(`buser_pedidos/${pixAtual.telLimpo}/pix/${pixAtual.txid}`).update({
         pixCopiado: true,
