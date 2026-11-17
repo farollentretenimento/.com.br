@@ -4,19 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Farol Entretenimento - Compra Segura | Envio Imediato</title>
-
-<!-- ÍCONE DA ABA DO NAVEGADOR (FAVICON) -->
-<link rel="icon" href="https://farolentretenimento.com/wp-content/uploads/2025/09/cropped-simbolo-32x32.png" sizes="32x32" />
-<link rel="icon" href="https://farolentretenimento.com/wp-content/uploads/2025/09/cropped-simbolo-192x192.png" sizes="192x192" />
-<link rel="apple-touch-icon" href="https://farolentretenimento.com/wp-content/uploads/2025/09/cropped-simbolo-180x180.png" />
-
-<!-- PREVIEW DO LINK NO WHATSAPP, INSTAGRAM E FACEBOOK -->
-<meta property="og:title" content="Farol Entretenimento - Compra Segura" />
-<meta property="og:description" content="Gift Cards com entrega imediata. Escolha seu plano e receba na hora!" />
-<meta property="og:url" content="https://farollentretenimento.github.io/.com.br/" />
-<meta property="og:image" content="https://farolentretenimento.com/wp-content/uploads/2025/09/Design-sem-nome-e1758415887104-1400x471.png" />
-<meta property="og:type" content="website" />
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
@@ -408,7 +395,7 @@ const db = firebase.database();
       visitorId = 'v_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8);
       localStorage.setItem('farol_visitor_id', visitorId);
     }
-    const ref = db.ref('buser_visitas/' + visitorId);
+    const ref = db.ref('farol_visitas/' + visitorId);
     ref.once('value').then(snap => {
       const existente = snap.val();
       if(!existente){
@@ -427,7 +414,7 @@ const db = firebase.database();
 })();
 
 // ============================================================
-// CUPONS E PRODUTOS (Imagens Corrigidas e Diretas)
+// CUPONS E PRODUTOS
 // ============================================================
 const CUPONS = {"FAROL10":0.10,"BEMVINDO15":0.15,"FAROL20":0.20};
 
@@ -443,7 +430,7 @@ const produtos = [
   {id:8276,nome:"Gift Card Eppi / flixx cine – Anual",cat:"Anual",de:null,por:129.98,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/eppi-anual-1-247x343.png",cor:"#007f3d"},
   {id:1629,nome:"Gift Card nexaTV – Mensal",cat:"Mensal",de:null,por:22.98,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tvexpress-mensal.png",cor:"#4a0cb0"},
   {id:1628,nome:"Gift Card nexa tv/ TVE – Anual",cat:"Anual",de:null,por:150.98,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tvexpress-anual-1.png",cor:"#4a0cb0"},
-  {id:1630,nome:"Gift Card nexa tv / TVE – trimestral",cat:"Trimestral",de:null,por:59.98,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tvexpress-mensal.png",cor:"#4a0cb0"} // Usando imagem do mensal como fallback temporário
+  {id:1630,nome:"Gift Card nexa tv / TVE – trimestral",cat:"Trimestral",de:null,por:59.98,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tvexpress-mensal.png",cor:"#4a0cb0"}
 ];
 
 const brl = n => "R$ " + n.toFixed(2).replace(".", ",");
@@ -575,18 +562,17 @@ function updateCartUI(){
   if(descontoAtual > 0){
     descRow.style.display = "flex";
     document.getElementById("cartDesconto").textContent = `- ${brl(subtotal * descontoAtual)}`;
-  } else descRow.style.display = "none";
+  } else {
+    descRow.style.display = "none";
+  }
   const tbody = document.getElementById("cartTableBody");
   if(itens.length === 0){
-    tbody.innerHTML = `<tr><td colspan="2" style="text-align:center;color:#999;padding:40px;">Carrinho vazio.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="2" style="text-align:center;padding:20px;color:#999">Seu carrinho está vazio.</td></tr>`;
   } else {
-    tbody.innerHTML = itens.map(i => {
-      let thumbStyle = i.img ? `background-image:url('${i.img}');` : `background-color:${i.cor};`;
-      return `<tr><td><div style="display:flex;align-items:center;gap:15px;"><div class="cart-drawer-thumb" style="${thumbStyle}">${!i.img ? i.nome.split('–')[0] : ''}</div><div><h3 style="font-size:14px;font-weight:700;color:var(--heading);margin-bottom:4px;">${i.nome}</h3><div style="font-size:13px;color:var(--primary);font-weight:700;">${brl(i.preco)}</div></div></div></td><td><div style="display:flex;align-items:center;justify-content:flex-end;gap:10px;"><button style="width:30px;height:30px;border:1px solid var(--border);background:#fff;border-radius:5px;font-weight:700;cursor:pointer;" onclick="changeQty(${i.id}, -1)">−</button><span>${i.qty}</span><button style="width:30px;height:30px;border:1px solid var(--border);background:#fff;border-radius:5px;font-weight:700;cursor:pointer;" onclick="changeQty(${i.id}, 1)">+</button></div></td></tr>`;
-    }).join("");
+    tbody.innerHTML = itens.map(i => `<tr><td><strong>${i.nome}</strong></td><td style="text-align:right">${i.qty}</td></tr>`).join("");
   }
   localStorage.setItem("farol_cart", JSON.stringify(carrinho));
-  if(document.getElementById("cartDrawer").classList.contains("active")) renderDrawer();
+  renderDrawer();
 }
 function changeQty(id, delta){
   if(!carrinho[id]) return;
@@ -594,286 +580,223 @@ function changeQty(id, delta){
   if(carrinho[id].qty <= 0) delete carrinho[id];
   updateCartUI();
 }
+
+// ============================================================
+// CUPOM
+// ============================================================
 function aplicarCupom(){
-  const codigo = document.getElementById("cupomInput").value.trim().toUpperCase();
-  if(!codigo){ showToast("Digite um código"); return; }
-  if(CUPONS[codigo]){
-    descontoAtual = CUPONS[codigo];
-    cupomAplicado = codigo;
-    showToast(`Cupom ${codigo}: ${descontoAtual*100}% OFF`);
+  const input = document.getElementById("cupomInput").value.trim().toUpperCase();
+  if(!input){ showToast("Digite um cupom."); return; }
+  if(CUPONS[input] !== undefined){
+    descontoAtual = CUPONS[input];
+    cupomAplicado = input;
+    document.getElementById("cupomInput").value = input;
+    showToast(`Cupom ${input} aplicado! ${descontoAtual*100}% OFF`);
     updateCartUI();
-  } else showToast("Cupom inválido");
+  } else {
+    showToast("Cupom inválido.");
+  }
 }
 
 // ============================================================
-// MÁSCARAS
+// CHECKOUT E PIX
 // ============================================================
-document.getElementById('cpf').addEventListener('input', function(){
-  let v = this.value.replace(/\D/g, '').slice(0, 11);
-  v = v.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-  this.value = v;
-});
-document.getElementById('telefone').addEventListener('input', function(){
-  let v = this.value.replace(/\D/g, '').slice(0, 11);
-  if(v.length <= 10) v = v.replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{4})(\d)/, '$1-$2');
-  else v = v.replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d)/, '$1-$2');
-  this.value = v;
-});
-document.getElementById('cep').addEventListener('input', function(){
-  let v = this.value.replace(/\D/g, '').slice(0, 8);
-  v = v.replace(/(\d{5})(\d)/, '$1-$2');
-  this.value = v;
-});
+const form = document.getElementById("checkoutForm");
 
-// ============================================================
-// VALIDADORES
-// ============================================================
-function validarCPF(cpf){
-  cpf = cpf.replace(/\D/g, '');
-  if(cpf.length !== 11) return false;
-  if(/^(\d)\1{10}$/.test(cpf)) return false;
-  let soma = 0;
-  for(let i=0;i<9;i++) soma += parseInt(cpf[i]) * (10-i);
-  let resto = (soma*10) % 11;
-  if(resto === 10) resto = 0;
-  if(resto !== parseInt(cpf[9])) return false;
+// Máscaras e Validações
+function mascaraCPF(v) {
+  v = v.replace(/\D/g, "");
+  if (v.length > 11) v = v.slice(0, 11);
+  v = v.replace(/(\d{3})(\d)/, "$1.$2");
+  v = v.replace(/(\d{3})(\d)/, "$1.$2");
+  v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+  return v;
+}
+function mascaraTel(v) {
+  v = v.replace(/\D/g, "");
+  if (v.length > 11) v = v.slice(0, 11);
+  v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
+  v = v.replace(/(\d{5})(\d)/, "$1-$2");
+  return v;
+}
+function mascaraCEP(v) {
+  v = v.replace(/\D/g, "");
+  if (v.length > 8) v = v.slice(0, 8);
+  v = v.replace(/(\d{5})(\d)/, "$1-$2");
+  return v;
+}
+document.getElementById("cpf").addEventListener("input", e => e.target.value = mascaraCPF(e.target.value));
+document.getElementById("telefone").addEventListener("input", e => e.target.value = mascaraTel(e.target.value));
+document.getElementById("cep").addEventListener("input", e => e.target.value = mascaraCEP(e.target.value));
+
+function validaCPF(cpf) {
+  cpf = cpf.replace(/\D/g, "");
+  if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+  let soma = 0, resto;
+  for (let i = 1; i <= 9; i++) soma += parseInt(cpf.substring(i-1, i)) * (11 - i);
+  resto = (soma * 10) % 11;
+  if (resto === 10 || resto === 11) resto = 0;
+  if (resto !== parseInt(cpf.substring(9, 10))) return false;
   soma = 0;
-  for(let i=0;i<10;i++) soma += parseInt(cpf[i]) * (11-i);
-  resto = (soma*10) % 11;
-  if(resto === 10) resto = 0;
-  if(resto !== parseInt(cpf[10])) return false;
+  for (let i = 1; i <= 10; i++) soma += parseInt(cpf.substring(i-1, i)) * (12 - i);
+  resto = (soma * 10) % 11;
+  if (resto === 10 || resto === 11) resto = 0;
+  if (resto !== parseInt(cpf.substring(10, 11))) return false;
   return true;
 }
-function validarTelefone(tel){
-  const v = tel.replace(/\D/g, '');
-  if(v.length < 10 || v.length > 11) return false;
-  const ddd = parseInt(v.substring(0,2));
-  if(ddd < 11 || ddd > 99) return false;
-  if(v.length === 11 && v[2] !== '9') return false;
-  if(v.length === 10 && (v[2] === '0' || v[2] === '1')) return false;
-  return true;
-}
-function validarCEP(cep){ return cep.replace(/\D/g,'').length === 8; }
-function validarNome(nome){ return /^[A-Za-zÀ-ÿ\s'-]{2,}$/.test(nome.trim()); }
-function validarEmail(email){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim()); }
 
-function marcarErro(id, msg){
-  const el = document.getElementById(id);
-  el.style.borderColor = '#e31e24';
-  el.style.background = '#fff5f5';
-  const anterior = el.parentNode.querySelector('.erro-msg');
-  if(anterior) anterior.remove();
-  const span = document.createElement('span');
-  span.className = 'erro-msg';
-  span.textContent = msg;
-  el.parentNode.appendChild(span);
-}
-function limparErro(id){
-  const el = document.getElementById(id);
-  el.style.borderColor = '';
-  el.style.background = '';
-  const msg = el.parentNode.querySelector('.erro-msg');
-  if(msg) msg.remove();
-}
-
-// ============================================================
-// PIX — GERAÇÃO
-// ============================================================
-function calcularCRC16(payload){
+// Utils PIX
+function calcularCRC16(payload) {
   let crc = 0xFFFF;
-  for(let i = 0; i < payload.length; i++){
+  for (let i = 0; i < payload.length; i++) {
     crc ^= payload.charCodeAt(i) << 8;
-    for(let j = 0; j < 8; j++){
+    for (let j = 0; j < 8; j++) {
       crc = (crc & 0x8000) ? ((crc << 1) ^ 0x1021) : (crc << 1);
       crc &= 0xFFFF;
     }
   }
   return crc.toString(16).toUpperCase().padStart(4, '0');
 }
-function campoPix(id, valor){ return id + String(valor.length).padStart(2, '0') + valor; }
-
-function gerarPayloadPix({ key, name, city, amount, txid }){
-  const gui = 'br.gov.bcb.pix';
-  const nome = name.substring(0, 25).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase();
-  const cidade = city.substring(0, 15).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase();
-  const tid = (txid || '***').substring(0, 25);
-  let payload = '';
-  payload += campoPix('00', '01');
-  payload += campoPix('26', campoPix('00', gui) + campoPix('01', key));
-  payload += campoPix('52', '0000');
-  payload += campoPix('53', '986');
-  if(amount) payload += campoPix('54', Number(amount).toFixed(2));
-  payload += campoPix('58', 'BR');
-  payload += campoPix('59', nome);
-  payload += campoPix('60', cidade);
-  payload += campoPix('62', campoPix('05', tid));
-  payload += '6304';
-  payload += calcularCRC16(payload);
-  return payload;
+function campoPix(id, valor) {
+  return id + String(valor.length).padStart(2, '0') + valor;
 }
 
-// ============================================================
-// FINALIZAR COMPRA → GERA PIX
-// ============================================================
-async function finalizarCompra(e){
+async function finalizarCompra(e) {
   e.preventDefault();
+  
+  // 1. Validações
+  const nome = document.getElementById("nome").value.trim();
+  const sobrenome = document.getElementById("sobrenome").value.trim();
+  const cpf = document.getElementById("cpf").value.trim();
+  const telefone = document.getElementById("telefone").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const cep = document.getElementById("cep").value.trim();
+  const endereco = document.getElementById("endereco").value.trim();
+  const numero = document.getElementById("numero").value.trim();
+  const complemento = document.getElementById("complemento").value.trim();
+  const bairro = document.getElementById("bairro").value.trim();
+  const cidade = document.getElementById("cidade").value.trim();
+  const estado = document.getElementById("estado").value.trim().toUpperCase();
 
-  const nome = document.getElementById('nome').value.trim();
-  const sobrenome = document.getElementById('sobrenome').value.trim();
-  const cpf = document.getElementById('cpf').value.trim();
-  const telefone = document.getElementById('telefone').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const cep = document.getElementById('cep').value.trim();
-  const endereco = document.getElementById('endereco').value.trim();
-  const numero = document.getElementById('numero').value.trim();
-  const complemento = document.getElementById('complemento').value.trim();
-  const bairro = document.getElementById('bairro').value.trim();
-  const cidade = document.getElementById('cidade').value.trim();
-  const estado = document.getElementById('estado').value.trim().toUpperCase();
-
-  ['nome','sobrenome','cpf','telefone','email','cep','endereco','numero','bairro','cidade','estado'].forEach(limparErro);
-
-  let erro = false, primeiroErro = null;
-  const checar = (id, cond, msg) => {
-    if(!cond){ marcarErro(id, msg); erro = true; if(!primeiroErro) primeiroErro = id; }
-  };
-  checar('nome', validarNome(nome), 'Nome inválido');
-  checar('sobrenome', validarNome(sobrenome), 'Sobrenome inválido');
-  checar('cpf', validarCPF(cpf), 'CPF inválido');
-  checar('telefone', validarTelefone(telefone), 'Telefone inválido');
-  checar('email', validarEmail(email), 'E-mail inválido');
-  checar('cep', validarCEP(cep), 'CEP inválido');
-  checar('endereco', endereco.length >= 3, 'Informe o endereço');
-  checar('numero', numero.length > 0, 'Informe o número');
-  checar('bairro', bairro.length >= 2, 'Informe o bairro');
-  checar('cidade', cidade.length >= 2, 'Informe a cidade');
-  checar('estado', /^[A-Z]{2}$/.test(estado), 'UF inválida');
-
-  if(erro){
-    showToast('Corrija os campos em vermelho');
-    document.getElementById(primeiroErro).scrollIntoView({behavior:'smooth', block:'center'});
-    document.getElementById(primeiroErro).focus();
+  if (!nome || !sobrenome || !cpf || !telefone || !email || !cep || !endereco || !numero || !bairro || !cidade || !estado) {
+    showToast("Preencha todos os campos obrigatórios (*).");
     return;
   }
-  if(Object.keys(carrinho).length === 0){ showToast('Carrinho vazio!'); return; }
+  if (!validaCPF(cpf)) {
+    showToast("CPF inválido. Verifique os números.");
+    return;
+  }
 
-  const subtotal = Object.values(carrinho).reduce((s,i) => s + i.qty * i.preco, 0);
+  // 2. Preparar Dados
+  const itens = Object.values(carrinho);
+  const subtotal = itens.reduce((s,i) => s + i.qty * i.preco, 0);
   const totalFinal = subtotal * (1 - descontoAtual);
-  const telLimpo = telefone.replace(/\D/g, '');
-
-  let pixCfg;
-  try {
-    const snap = await db.ref('buser_pix_cfg').once('value');
-    pixCfg = snap.val();
-  } catch(e){
-    console.error('Erro ao buscar config PIX', e);
-  }
-  if(!pixCfg || !pixCfg.key){
-    showToast('Loja indisponível. Tente novamente em minutos.', 'error');
-    return;
-  }
-
-  const payload = gerarPayloadPix({
-    key: pixCfg.key,
-    name: pixCfg.name || 'FAROL',
-    city: pixCfg.city || 'CURITIBA',
-    amount: totalFinal,
-    txid: orderNum
-  });
-
-  pixAtual = { payload, valor: totalFinal, txid: orderNum, telLimpo };
-
-  const pedido = {
-    txid: orderNum.toString(),
-    nome: nome + " " + sobrenome,
-    cpf: cpf,
-    whatsapp: telLimpo,
-    email: email,
-    telefone: telefone,
-    endereco: `${endereco}, ${numero}${complemento ? ' - ' + complemento : ''}`,
-    bairro: bairro,
-    cidade: cidade,
-    estado: estado,
-    cep: cep,
-    payment: 'PIX',
-    amount: totalFinal,
-    subtotal: subtotal,
-    desconto: subtotal * descontoAtual,
-    cupom: cupomAplicado,
-    status: 'pending',
-    geradoEm: Date.now(),
-    pixGeradoEm: Date.now(),
-    pixCopiado: false,
-    pixPayload: payload,
-    produtos: Object.values(carrinho).map(i => ({id: i.id, nome: i.nome, preco: i.preco, qty: i.qty}))
-  };
+  const telLimpo = telefone.replace(/\D/g, "");
+  const txid = orderNum.toString();
+  
+  const btn = document.querySelector(".btn-checkout-final");
+  btn.disabled = true;
+  btn.textContent = "Gerando PIX...";
 
   try {
-    await db.ref(`buser_pedidos/${telLimpo}/pix/${orderNum}`).set(pedido);
-    console.log("Pedido salvo:", orderNum);
-  } catch(err) {
-    console.error("Erro ao salvar pedido:", err);
-    showToast('Erro ao registrar pedido. Tente novamente.', 'error');
-    return;
+    // 3. Buscar Chave PIX do Firebase
+    const snap = await db.ref('farol_pix_cfg').once('value');
+    const cfg = snap.val();
+    if (!cfg || !cfg.key) {
+      throw new Error("A loja ainda não configurou a chave PIX. Avise o administrador.");
+    }
+
+    // 4. Gerar Payload PIX
+    const gui = 'br.gov.bcb.pix';
+    const name = (cfg.name || 'FAROL').substring(0, 25).normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const city = (cfg.city || 'CURITIBA').substring(0, 15).normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    
+    let payload = '';
+    payload += campoPix('00', '01');
+    payload += campoPix('26', campoPix('00', gui) + campoPix('01', cfg.key));
+    payload += campoPix('52', '0000');
+    payload += campoPix('53', '986');
+    payload += campoPix('54', Number(totalFinal).toFixed(2));
+    payload += campoPix('58', 'BR');
+    payload += campoPix('59', name);
+    payload += campoPix('60', city);
+    payload += campoPix('62', campoPix('05', txid));
+    payload += '6304';
+    payload += calcularCRC16(payload);
+
+    pixAtual = { payload, valor: totalFinal, orderNum: txid };
+
+    // 5. Salvar Pedido no Firebase (Local correto: buser_pedidos/telefone/pix/id)
+    const pedidoObj = {
+      txid: txid,
+      nome: nome + " " + sobrenome,
+      cpf: cpf,
+      telefone: telefone,
+      whatsapp: telefone, // Compatibilidade
+      email: email,
+      cep: cep,
+      endereco: endereco + ", " + numero + (complemento ? " - " + complemento : ""),
+      bairro: bairro,
+      cidade: cidade,
+      estado: estado,
+      produtos: itens,
+      amount: totalFinal,
+      status: "pending",
+      geradoEm: Date.now(),
+      cupom: cupomAplicado
+    };
+
+    await db.ref(`buser_pedidos/${telLimpo}/pix/${txid}`).set(pedidoObj);
+
+    // 6. Mostrar Tela PIX
+    document.getElementById("pixOrderNum").textContent = txid;
+    document.getElementById("pixOrderNum2").textContent = txid;
+    document.getElementById("pixValor").textContent = brl(totalFinal);
+    document.getElementById("pixCopiaBox").textContent = payload;
+    document.getElementById("pixQrBox").innerHTML = "";
+    new QRCode(document.getElementById("pixQrBox"), { text: payload, width: 200, height: 200 });
+    
+    esconderTodas();
+    document.getElementById("pixScreen").classList.add("active");
+    window.scrollTo(0,0);
+
+    // Limpar carrinho
+    carrinho = {};
+    localStorage.removeItem("farol_cart");
+    updateCartUI();
+
+  } catch (err) {
+    console.error(err);
+    showToast(err.message || "Erro ao processar. Tente novamente.");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "GERAR PIX";
   }
-
-  mostrarTelaPix(payload, totalFinal, orderNum);
-
-  carrinho = {};
-  descontoAtual = 0;
-  cupomAplicado = "";
-  updateCartUI();
-  localStorage.removeItem("farol_order_num");
 }
 
-function mostrarTelaPix(payload, valor, num){
-  esconderTodas();
-  document.getElementById("pixScreen").classList.add("active");
-  document.getElementById("pixOrderNum").textContent = num;
-  document.getElementById("pixOrderNum2").textContent = num;
-  document.getElementById("pixValor").textContent = brl(valor);
-  document.getElementById("pixCopiaBox").textContent = payload;
-
-  const qrBox = document.getElementById("pixQrBox");
-  qrBox.innerHTML = '';
-  new QRCode(qrBox, { text: payload, width: 220, height: 220, colorDark: "#000", colorLight: "#fff" });
-
-  document.getElementById("btnCopiarPix").textContent = "📋 Copiar código PIX";
-  document.getElementById("btnCopiarPix").classList.remove("copiado");
-  window.scrollTo(0,0);
-}
-
-async function copiarPix(){
+// ============================================================
+// FUNÇÕES PIX E UTILS
+// ============================================================
+function copiarPix(){
   if(!pixAtual) return;
-  try {
-    await navigator.clipboard.writeText(pixAtual.payload);
-    document.getElementById("btnCopiarPix").textContent = "✓ Copiado!";
-    document.getElementById("btnCopiarPix").classList.add("copiado");
-    showToast("Código PIX copiado!");
-
-    try {
-      await db.ref(`buser_pedidos/${pixAtual.telLimpo}/pix/${pixAtual.txid}`).update({
-        pixCopiado: true,
-        pixCopiadoEm: Date.now()
-      });
-    } catch(e){ console.warn('Erro ao registrar cópia', e); }
-
+  navigator.clipboard.writeText(pixAtual.payload).then(() => {
+    const btn = document.getElementById("btnCopiarPix");
+    btn.textContent = "✅ Copiado!";
+    btn.classList.add("copiado");
     setTimeout(() => {
-      document.getElementById("btnCopiarPix").textContent = "📋 Copiar novamente";
+      btn.textContent = "📋 Copiar código PIX";
+      btn.classList.remove("copiado");
     }, 3000);
-  } catch(e){
-    showToast('Erro ao copiar. Selecione manualmente.', 'error');
-  }
+  });
 }
-
-function showToast(msg, tipo = 'info'){
+function showToast(msg){
   const t = document.getElementById("toast");
   t.textContent = msg;
-  t.style.background = tipo === 'error' ? '#d81b60' : '#222';
   t.classList.add("show");
   setTimeout(() => t.classList.remove("show"), 3000);
 }
 
+// Inicializar
 updateCartUI();
 </script>
 </body>
