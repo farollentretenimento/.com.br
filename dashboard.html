@@ -523,7 +523,7 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 const auth = firebase.auth();
 
-// ⚠️ TROQUE AQUI pelo e-mail que você criou no Firebase Console → Authentication → Users
+// ⚠️ SEU E-MAIL DE LOGIN AQUI
 const EMAIL_ADMIN = "trampfinaldeano@gmail.com";
 
 let pedidosCache = [];
@@ -591,7 +591,7 @@ auth.onAuthStateChanged(user => {
 
   if (user) {
     if (EMAIL_ADMIN && user.email !== EMAIL_ADMIN) {
-      alert('Você não tem permissão de administrador.');
+      alert('Você não tem permissão de administrador. Use o e-mail correto.');
       auth.signOut();
       return;
     }
@@ -635,14 +635,18 @@ async function iniciarPainel() {
 // PEDIDOS
 // ============================================================
 function ouvirPedidos() {
-  db.ref('farol_pedidos').on('value', snap => {
+  // ⚠️ O PAINEL AGORA LÊ DE 'buser_pedidos' (ONDE A LOJA SALVA)
+  db.ref('buser_pedidos').on('value', snap => {
     pedidosCache = [];
     snap.forEach(clienteSnap => {
       clienteSnap.forEach(areaSnap => {
         if (areaSnap.key === 'pix') {
           areaSnap.forEach(pedidoSnap => {
             const p = pedidoSnap.val();
-            if (p && p.txid) pedidosCache.push(p);
+            if (p && p.txid) {
+              p.txid = pedidoSnap.key; // Garante que o ID esteja no objeto
+              pedidosCache.push(p);
+            }
           });
         }
       });
@@ -664,7 +668,7 @@ function ouvirPedidos() {
     primeiraCarga = false;
   }, err => {
     console.error('Erro ao ouvir pedidos:', err);
-    mostrarToast('Erro de leitura no banco. Verifique regras.', 'error');
+    mostrarToast('Erro de leitura no banco. Verifique as regras.', 'error');
   });
 }
 
@@ -746,7 +750,7 @@ function renderizarPedidos() {
 
 async function encontrarReferenciaPedido(txid) {
   let ref = null;
-  await db.ref('farol_pedidos').once('value', snap => {
+  await db.ref('buser_pedidos').once('value', snap => {
     snap.forEach(cli => {
       cli.forEach(area => {
         if (area.key === 'pix') {
@@ -844,7 +848,7 @@ async function limparTUDO() {
   }
 
   try {
-    await db.ref('farol_pedidos').remove();
+    await db.ref('buser_pedidos').remove();
     await db.ref('farol_visitas').remove();
     mostrarToast('TODOS os dados foram apagados!', 'success');
   } catch(e) {
@@ -862,9 +866,9 @@ function processarClientes() {
     if (p.status === 'cancelled') return;
     const cpf = p.cpf || 'Sem CPF';
     if (!clientesMap[cpf]) {
-      clientesMap[cpf] = { nome: p.nome, cpf: cpf, whatsapp: p.whatsapp || '', email: p.email || '', totalCompras: 0, ultimaCompra: 0 };
+      clientesMap[cpf] = { nome: p.nome, cpf: cpf, whatsapp: p.whatsapp || p.telefone || '', email: p.email || '', totalCompras: 0, ultimaCompra: 0 };
     }
-    clientesMap[cpf].totalCompras += Number(p.amount);
+    clientesMap[cpf].totalCompras += Number(p.amount || 0);
     if ((p.geradoEm || 0) > clientesMap[cpf].ultimaCompra) clientesMap[cpf].ultimaCompra = p.geradoEm;
   });
   window.clientesCache = Object.values(clientesMap).sort((a,b) => b.ultimaCompra - a.ultimaCompra);
@@ -1129,7 +1133,7 @@ function exportarCSV() {
     p.nome, 
     p.cpf, 
     p.email,
-    p.whatsapp,
+    p.telefone,
     (p.produtos || []).map(i => `${i.qty}x ${i.nome}`).join(' | '),
     p.amount, 
     new Date(p.geradoEm).toLocaleString('pt-BR')
