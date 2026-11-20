@@ -7,7 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap">
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
@@ -31,32 +30,17 @@ html,body{font-family:'Poppins',sans-serif;color:var(--text-main);background:var
 button{font-family:inherit;cursor:pointer;border:none}
 input,select{font-family:inherit;outline:none}
 
-/* LOGIN */
-#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;background:linear-gradient(135deg,var(--brand) 0%,var(--brand-dark) 60%,#2d006b 100%);position:relative;overflow:hidden}
-#login-screen::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 20% 30%,rgba(255,255,255,.15) 0%,transparent 50%),radial-gradient(circle at 80% 70%,rgba(255,255,255,.1) 0%,transparent 40%)}
-.login-card{background:#fff;border-radius:var(--r-xl);padding:48px 40px;width:100%;max-width:420px;box-shadow:var(--shadow-xl);position:relative;z-index:2}
-.login-card .logo-box{width:64px;height:64px;border-radius:var(--r-lg);background:linear-gradient(135deg,var(--brand) 0%,var(--brand-dark) 100%);display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;margin:0 auto 20px;box-shadow:0 8px 24px -4px rgba(94,23,235,.4)}
-.login-card h1{font-size:24px;text-align:center;margin-bottom:6px;font-weight:700;color:#1a1a1a}
-.login-card p{font-size:13px;color:#757575;text-align:center;margin-bottom:28px}
-.login-card input{width:100%;padding:14px 16px;border:1.5px solid #ebebeb;border-radius:var(--r-md);font-size:15px;transition:0.2s;background:#f7f7f7;margin-bottom:12px}
-.login-card input:focus{border-color:var(--brand);background:#fff;box-shadow:0 0 0 3px var(--brand-soft)}
-.login-card button{width:100%;padding:14px;margin-top:8px;border-radius:var(--r-md);background:linear-gradient(135deg,var(--brand) 0%,var(--brand-dark) 100%);color:#fff;font-weight:700;font-size:15px;transition:0.2s;box-shadow:0 8px 24px -4px rgba(94,23,235,.35)}
-.login-card button:hover{transform:translateY(-2px);box-shadow:0 12px 32px -4px rgba(94,23,235,.45)}
-.login-card button:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.login-error{color:#d81b60;font-size:13px;margin-top:12px;text-align:center;font-weight:500;min-height:18px}
+/* LOGIN REMOVIDO */
 
 /* LAYOUT */
-#admin-panel{display:none;min-height:100vh}
-#admin-panel.active{display:flex;flex-direction:column}
+#admin-panel{display:flex;flex-direction:column;min-height:100vh}
 .admin-header{position:sticky;top:0;z-index:50;background:var(--bg-header);backdrop-filter:blur(16px);border-bottom:1px solid var(--border-color);height:64px;display:flex;align-items:center;padding:0 24px;gap:16px}
 .admin-header .brand-logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px}
 .admin-header .brand-logo .dot{width:32px;height:32px;border-radius:var(--r-sm);background:linear-gradient(135deg,var(--brand),var(--brand-dark));display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;box-shadow:0 4px 10px -2px rgba(94,23,235,.4)}
 .admin-header .spacer{flex:1}
 .admin-header .icon-btn{width:40px;height:40px;border-radius:var(--r-md);background:var(--hover-bg);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--text-main);transition:0.2s}
 .admin-header .icon-btn:hover{background:var(--brand-soft);color:var(--brand)}
-.admin-header .logout-btn{padding:8px 16px;border-radius:var(--r-md);background:var(--hover-bg);font-weight:600;font-size:13px;color:var(--text-main);transition:0.2s}
-.admin-header .logout-btn:hover{background:#ffe0e5;color:#d81b60}
-.admin-header .user-email{font-size:12px;color:var(--text-muted);font-weight:500}
+.admin-header .logout-btn{padding:8px 16px;border-radius:var(--r-md);background:var(--hover-bg);font-weight:600;font-size:13px;color:var(--text-main);transition:0.2s; display:none;}
 .admin-layout{display:flex;flex:1;min-height:calc(100vh - 64px)}
 
 /* SIDEBAR */
@@ -191,27 +175,12 @@ tr:hover td{background:var(--hover-bg)}
 </head>
 <body>
 
-<!-- TELA DE LOGIN -->
-<div id="login-screen">
-  <div class="login-card">
-    <div class="logo-box">🎟️</div>
-    <h1>Farol Admin</h1>
-    <p>Acesso restrito à equipe</p>
-    <input type="email" id="login-email" placeholder="E-mail do admin" autocomplete="username">
-    <input type="password" id="login-senha" placeholder="Senha" autocomplete="current-password">
-    <button id="btn-login" onclick="fazerLogin()">Entrar</button>
-    <div class="login-error" id="login-error"></div>
-  </div>
-</div>
-
 <div id="admin-panel">
   <header class="admin-header">
     <button class="menu-toggle-btn" onclick="toggleSidebar()">☰</button>
     <div class="brand-logo"><div class="dot">🎟️</div> Farol Admin</div>
     <div class="spacer"></div>
-    <span class="user-email" id="user-email-display"></span>
     <button class="icon-btn" onclick="toggleDarkMode()" title="Alternar Tema">🌙</button>
-    <button class="logout-btn" onclick="fazerLogout()">Sair</button>
   </header>
 
   <div class="admin-layout">
@@ -221,7 +190,6 @@ tr:hover td{background:var(--hover-bg)}
       <button class="nav-item" data-section="clientes" onclick="irParaSecao('clientes')"><i>👥</i> Base de Clientes</button>
       <button class="nav-item" data-section="visitas" onclick="irParaSecao('visitas')"><i>📈</i> Visitas <span class="nav-badge" id="nav-badge-visitas">0</span></button>
       <button class="nav-item" data-section="pix-config" onclick="irParaSecao('pix-config')"><i>💳</i> Config. PIX</button>
-      <button class="nav-item" data-section="config" onclick="irParaSecao('config')"><i>⚙️</i> Configurações</button>
       <button class="nav-item danger" data-section="limpar" onclick="irParaSecao('limpar')"><i>🚨</i> Limpar Dados</button>
     </aside>
 
@@ -439,32 +407,6 @@ tr:hover td{background:var(--hover-bg)}
         </div>
       </section>
 
-      <!-- CONFIGURAÇÕES -->
-      <section class="section" id="section-config">
-        <div class="section-header">
-          <div><h1>Configurações</h1><p>Gerencie sua conta admin</p></div>
-        </div>
-        <div class="card" style="max-width:500px">
-          <h2>🔐 Alterar Senha do Admin</h2>
-          <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">A senha é alterada diretamente no Firebase Auth. Isso encerra a sessão nos outros dispositivos.</p>
-          <div class="pix-form" style="grid-template-columns:1fr">
-            <div class="form-group">
-              <label>Senha Atual</label>
-              <input type="password" id="senha-atual" placeholder="Sua senha atual">
-            </div>
-            <div class="form-group">
-              <label>Nova Senha</label>
-              <input type="password" id="nova-senha" placeholder="Mínimo 6 caracteres">
-            </div>
-            <div class="form-group">
-              <label>Confirmar Nova Senha</label>
-              <input type="password" id="confirma-senha" placeholder="Repita a senha">
-            </div>
-          </div>
-          <button class="btn-primary" style="margin-top:20px" onclick="alterarSenha()">Salvar Nova Senha</button>
-        </div>
-      </section>
-
       <!-- LIMPAR DADOS -->
       <section class="section" id="section-limpar">
         <div class="section-header">
@@ -509,7 +451,7 @@ tr:hover td{background:var(--hover-bg)}
 
 <script>
 // ============================================================
-// CONFIG FIREBASE - TÉCNICA ANTI-ERRO (CHAVE DIVIDIDA)
+// CONFIG FIREBASE - CHAVE DIVIDIDA PARA NÃO DAR ERRO
 // ============================================================
 const chaveParte1 = "AIzaSyAjyqdepP--oj9JmwO8";
 const chaveParte2 = "7nvkBo4tbrRgA0Y";
@@ -525,13 +467,9 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-const auth = firebase.auth();
-
-const EMAIL_ADMIN = "trampfinaldeano@gmail.com";
 
 let pedidosCache = [];
 let visitasCache = [];
-let primeiraCarga = true;
 
 // ============================================================
 // TEMA ESCURO
@@ -548,69 +486,6 @@ if (localStorage.getItem('farol_admin_theme') === 'dark') {
 }
 
 // ============================================================
-// LOGIN COM FIREBASE AUTH
-// ============================================================
-async function fazerLogin() {
-  const email = document.getElementById('login-email').value.trim();
-  const senha = document.getElementById('login-senha').value;
-  const errEl = document.getElementById('login-error');
-  const btn = document.getElementById('btn-login');
-
-  errEl.textContent = '';
-  if (!email || !senha) { errEl.textContent = 'Preencha e-mail e senha'; return; }
-
-  btn.disabled = true;
-  btn.textContent = 'Entrando...';
-
-  try {
-    await auth.signInWithEmailAndPassword(email, senha);
-  } catch (e) {
-    console.error(e);
-    if (e.code === 'auth/user-not-found' || e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential') {
-      errEl.textContent = 'E-mail ou senha incorretos';
-    } else if (e.code === 'auth/too-many-requests') {
-      errEl.textContent = 'Muitas tentativas. Aguarde alguns minutos.';
-    } else {
-      errEl.textContent = 'Erro ao entrar: ' + e.message;
-    }
-    btn.disabled = false;
-    btn.textContent = 'Entrar';
-  }
-}
-
-async function fazerLogout() {
-  if (!confirm('Deseja realmente sair?')) return;
-  try { await auth.signOut(); } catch(e) { console.error(e); }
-}
-
-document.getElementById('login-senha').addEventListener('keypress', e => {
-  if (e.key === 'Enter') fazerLogin();
-});
-
-auth.onAuthStateChanged(user => {
-  const loginScreen = document.getElementById('login-screen');
-  const adminPanel = document.getElementById('admin-panel');
-
-  if (user) {
-    if (EMAIL_ADMIN && user.email !== EMAIL_ADMIN) {
-      alert('Você não tem permissão de administrador.');
-      auth.signOut();
-      return;
-    }
-    loginScreen.style.display = 'none';
-    adminPanel.classList.add('active');
-    document.getElementById('user-email-display').textContent = user.email;
-    iniciarPainel();
-  } else {
-    loginScreen.style.display = 'flex';
-    adminPanel.classList.remove('active');
-    pedidosCache = [];
-    visitasCache = [];
-    primeiraCarga = true;
-  }
-});
-
-// ============================================================
 // NAVEGAÇÃO
 // ============================================================
 function irParaSecao(secao) {
@@ -622,7 +497,10 @@ function irParaSecao(secao) {
 }
 function toggleSidebar() { document.getElementById('sidebar')?.classList.toggle('open'); }
 
-async function iniciarPainel() {
+// INICIA O PAINEL DIRETO, SEM PRECISAR DE LOGIN
+iniciarPainel();
+
+function iniciarPainel() {
   carregarPixConfig();
   ouvirPedidos();
   ouvirVisitas();
@@ -1207,32 +1085,6 @@ function exportarCSV() {
   a.href = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' }));
   a.download = `pedidos-farol-${new Date().toISOString().slice(0,10)}.csv`;
   a.click();
-}
-
-async function alterarSenha() {
-  const atual = document.getElementById('senha-atual').value;
-  const s1 = document.getElementById('nova-senha').value;
-  const s2 = document.getElementById('confirma-senha').value;
-  const user = auth.currentUser;
-
-  if (!user) { mostrarToast('Sessão expirada. Faça login de novo.', 'error'); return; }
-  if (!atual) { mostrarToast('Informe a senha atual', 'error'); return; }
-  if (s1.length < 6) { mostrarToast('Mínimo 6 caracteres', 'error'); return; }
-  if (s1 !== s2) { mostrarToast('Senhas não coincidem', 'error'); return; }
-
-  try {
-    const cred = firebase.auth.EmailAuthProvider.credential(user.email, atual);
-    await user.reauthenticateWithCredential(cred);
-    await user.updatePassword(s1);
-    mostrarToast('Senha alterada com sucesso!', 'success');
-    document.getElementById('senha-atual').value = '';
-    document.getElementById('nova-senha').value = '';
-    document.getElementById('confirma-senha').value = '';
-  } catch(e) {
-    console.error(e);
-    if (e.code === 'auth/wrong-password') mostrarToast('Senha atual incorreta', 'error');
-    else mostrarToast('Erro: ' + e.message, 'error');
-  }
 }
 
 setInterval(() => {
