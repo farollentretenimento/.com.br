@@ -394,6 +394,7 @@ tr:hover td{background:var(--hover-bg)}
                 <tr>
                   <th>Status</th>
                   <th>ID do Visitante</th>
+                  <th>IP</th>
                   <th>Primeira Visita</th>
                   <th>Última Atividade</th>
                 </tr>
@@ -865,7 +866,6 @@ function verPedido(txid) {
     <div class="detail-row"><span>CPF</span><strong>${p.cpf}</strong></div>
     <div class="detail-row"><span>E-mail</span><strong>${p.email}</strong></div>
     <div class="detail-row"><span>WhatsApp</span><strong>${p.telefone} ${zapBtn ? ' - ' + zapBtn : ''}</strong></div>
-    <div class="detail-row"><span>Endereço</span><strong>${p.endereco}<br>${p.bairro} - ${p.cidade}/${p.estado}<br>CEP: ${p.cep}</strong></div>
     
     <div style="margin-top:20px">
       <div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;margin-bottom:10px">Produtos</div>
@@ -972,6 +972,7 @@ function ouvirVisitas() {
       if (!v.ultimaAtividade) return;
       visitasCache.push({
         id: child.key,
+        ip: v.ip || '—',
         online: !!v.online,
         ultimaAtividade: v.ultimaAtividade,
         primeiraVisita: v.primeiraVisita || v.ultimaAtividade
@@ -1001,7 +1002,7 @@ function renderizarVisitas() {
   const ordenadas = [...visitasCache].sort((a, b) => b.ultimaAtividade - a.ultimaAtividade);
   const tbody = document.getElementById('lista-visitas');
 
-  if (!ordenadas.length) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text-muted)">Nenhum visitante registrado.</td></tr>'; return; }
+  if (!ordenadas.length) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-muted)">Nenhum visitante registrado.</td></tr>'; return; }
 
   tbody.innerHTML = ordenadas.map(v => {
     const isOnline = agora - v.ultimaAtividade < LIMITE;
@@ -1009,6 +1010,7 @@ function renderizarVisitas() {
       <tr>
         <td><div style="display:flex;align-items:center;gap:6px"><span class="v-dot ${isOnline ? 'online' : ''}"></span> <span style="font-size:11px;font-weight:600;color:${isOnline?'var(--green-dark)':'var(--text-muted)'}">${isOnline?'ONLINE':'Offline'}</span></div></td>
         <td style="font-family:monospace;font-size:12px">${v.id}</td>
+        <td style="font-family:monospace;font-size:12px">${v.ip || '—'}</td>
         <td style="font-size:12px">${new Date(v.primeiraVisita).toLocaleString('pt-BR')}</td>
         <td style="font-size:12px">${new Date(v.ultimaAtividade).toLocaleString('pt-BR')}</td>
       </tr>`;
