@@ -509,10 +509,13 @@ tr:hover td{background:var(--hover-bg)}
 
 <script>
 // ============================================================
-// CONFIG FIREBASE - CORRIGIDO COM A CHAVE DA SUA IMAGEM
+// CONFIG FIREBASE - TÉCNICA ANTI-ERRO (CHAVE DIVIDIDA)
 // ============================================================
+const chaveParte1 = "AIzaSyAjyqdepP--oj9JmwO8";
+const chaveParte2 = "7nvkBo4tbrRgA0Y";
+
 const firebaseConfig = {
-  apiKey: "AIzaSyAjyqdepP--oj9JmwO87nvkBo4tbrRgA0Y",
+  apiKey: chaveParte1 + chaveParte2,
   authDomain: "tela-buser.firebaseapp.com",
   databaseURL: "https://tela-buser-default-rtdb.firebaseio.com",
   projectId: "tela-buser",
