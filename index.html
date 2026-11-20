@@ -226,7 +226,7 @@ button{font-family:'Lato',sans-serif;cursor:pointer;}
       <button class="menu-btn" onclick="toggleMenu()" aria-label="Menu"><svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></button>
     </div>
     <a href="#" class="logo" onclick="showHome(event)">
-      <img src="https://farolentretenimento.com/wp-content/uploads/2025/09/Design-sem-nome-e1758415887104-1400x471.png" alt="Farol" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+      <img src="https://images.weserv.nl/?url=farolentretenimento.com/wp-content/uploads/2025/09/Design-sem-nome-e1758415887104-1400x471.png" alt="Farol" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
       <span style="display:none;color:#fff;font-size:22px;font-weight:900;letter-spacing:2px;">FAROL</span>
     </a>
     <div class="header-right">
@@ -247,11 +247,11 @@ button{font-family:'Lato',sans-serif;cursor:pointer;}
 
 <div id="homeScreen">
   <section class="banner-section">
-    <img src="https://farolentretenimento.com/wp-content/uploads/2025/11/FAROL-1.jpg" alt="Farol Banner">
+    <img src="https://images.weserv.nl/?url=farolentretenimento.com/wp-content/uploads/2025/11/FAROL-1.jpg" alt="Farol Banner">
   </section>
   <div class="section-title-container"><h2 class="section-title"><b></b><span>Escolha seu plano</span><b></b></h2></div>
   <div class="products-grid" id="gridHome"></div>
-  <div class="payments-section"><img src="https://farolentretenimento.com/wp-content/uploads/2024/10/formas-pagam.png.webp" alt="Pagamento" onerror="this.style.display='none'"></div>
+  <div class="payments-section"><img src="https://images.weserv.nl/?url=farolentretenimento.com/wp-content/uploads/2024/10/formas-pagam.png.webp" alt="Pagamento" onerror="this.style.display='none'"></div>
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-col"><h4>Quem Somos</h4><p>O Farol Entretenimento é uma revenda de GIFT CARD dos mais variados segmentos. Não somos responsáveis por adicionar conteúdo ou controlar a disponibilidade. Os usuários são responsáveis pelo seu Gift Card conforme o TERMO DE ACEITE.</p></div>
@@ -300,10 +300,9 @@ button{font-family:'Lato',sans-serif;cursor:pointer;}
   </div>
 </div>
 
-<!-- ================= CHECKOUT (SEM ENDEREÇO) ================= -->
 <div class="checkout-screen" id="checkoutScreen">
   <div class="checkout-content">
-    <div class="checkout-header-logo"><img src="https://farolentretenimento.com/wp-content/uploads/2025/09/Design-sem-nome-e1758415887104-1400x471.png" alt="Farol" onerror="this.style.display='none'"></div>
+    <div class="checkout-header-logo"><img src="https://images.weserv.nl/?url=farolentretenimento.com/wp-content/uploads/2025/09/Design-sem-nome-e1758415887104-1400x471.png" alt="Farol" onerror="this.style.display='none'"></div>
     <h2 class="checkout-title">DETALHES DA COMPRA</h2>
     <form id="checkoutForm" onsubmit="finalizarCompra(event)" novalidate>
       <h3 class="form-section-title">DETALHES DE COBRANÇA</h3>
@@ -312,6 +311,18 @@ button{font-family:'Lato',sans-serif;cursor:pointer;}
       <div class="form-group"><label>CPF <span>*</span></label><input type="text" id="cpf" required placeholder="000.000.000-00" inputmode="numeric"></div>
       <div class="form-group"><label>Telefone (DDD + Número) <span>*</span></label><input type="tel" id="telefone" required placeholder="(00) 00000-0000" inputmode="numeric"></div>
       <div class="form-group"><label>E-mail <span>*</span></label><input type="email" id="email" required placeholder="seu@email.com"></div>
+      <h3 class="form-section-title">DADOS DE CADASTRO</h3>
+      <div class="form-row"><div class="form-group"><label>CEP <span>*</span></label><input type="text" id="cep" required placeholder="00000-000" inputmode="numeric"></div></div>
+      <div class="form-group"><label>Endereço (Rua/Av) <span>*</span></label><input type="text" id="endereco" required></div>
+      <div class="form-row">
+        <div class="form-group"><label>Número <span>*</span></label><input type="text" id="numero" required></div>
+        <div class="form-group"><label>Complemento</label><input type="text" id="complemento" placeholder="Apto, Bloco"></div>
+      </div>
+      <div class="form-group"><label>Bairro <span>*</span></label><input type="text" id="bairro" required></div>
+      <div class="form-row">
+        <div class="form-group"><label>Cidade <span>*</span></label><input type="text" id="cidade" required></div>
+        <div class="form-group"><label>Estado <span>*</span></label><input type="text" id="estado" required maxlength="2" placeholder="UF" style="text-transform:uppercase"></div>
+      </div>
       <h3 class="form-section-title">FORMA DE PAGAMENTO</h3>
       <div class="payment-methods"><div class="payment-option selected" onclick="selectPay(this, 'PIX')">PIX</div></div>
       <button type="submit" class="btn-checkout-final">GERAR PIX</button>
@@ -360,106 +371,66 @@ button{font-family:'Lato',sans-serif;cursor:pointer;}
 
 <script>
 // ============================================================
-// CONFIG FIREBASE
+// ⚠️ COLE AS CHAVES DO SEU PROJETO TELA-BUSER AQUI ⚠️
 // ============================================================
 const firebaseConfig = {
-  apiKey: "AIzaSyCmoxq5NMQUj1hqyWhjaJz4Uw4grhsFFhA",
-  authDomain: "projeto-link-ddbf0.firebaseapp.com",
-  databaseURL: "https://projeto-link-ddbf0-default-rtdb.firebaseio.com",
-  projectId: "projeto-link-ddbf0",
-  storageBucket: "projeto-link-ddbf0.firebasestorage.app",
-  messagingSenderId: "560317126646",
-  appId: "1:560317126646:web:be9cad9c9ed350940399d7"
+  apiKey: "COLE_AQUI_O_API_KEY",
+  authDomain: "tela-buser.firebaseapp.com",
+  databaseURL: "https://tela-buser-default-rtdb.firebaseio.com", 
+  projectId: "tela-buser",
+  storageBucket: "tela-buser.firebasestorage.app",
+  messagingSenderId: "COLE_AQUI_O_SENDER_ID",
+  appId: "COLE_AQUI_O_APP_ID"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
 // ============================================================
-// TRACKING DE VISITAS — IP + ID ESTÁVEL
+// TRACKING DE VISITAS
 // ============================================================
-async function trackVisita(){
+(function trackVisita(){
   try {
     let visitorId = localStorage.getItem('farol_visitor_id');
-    let ip = localStorage.getItem('farol_visitor_ip');
-
-    // Se ainda não tem ID/IP salvos → busca IP e gera ID estável
-    if(!visitorId || !ip){
-      try {
-        const resp = await fetch('https://api.ipify.org?format=json');
-        const data = await resp.json();
-        ip = data.ip;
-      } catch(e) {
-        console.warn('Não foi possível obter IP:', e);
-        ip = 'desconhecido';
-      }
-      // ID estável = IP com pontos trocados por underscore
-      visitorId = 'vis_' + ip.replace(/\./g, '_');
-      localStorage.setItem('farol_visitor_ip', ip);
+    if(!visitorId){
+      visitorId = 'v_' + Date.now() + '_' + Math.random().toString(36).substring(2, 8);
       localStorage.setItem('farol_visitor_id', visitorId);
     }
-
-    const agora = Date.now();
-    const ref = db.ref('farol_visitas/' + visitorId);
-
-    await ref.once('value').then(snap => {
+    const ref = db.ref('buser_visitas/' + visitorId);
+    ref.once('value').then(snap => {
       const existente = snap.val();
       if(!existente){
-        ref.set({
-          ip: ip,
-          primeiraVisita: agora,
-          ultimaAtividade: agora,
-          online: true
-        });
+        ref.set({ primeiraVisita: Date.now(), ultimaAtividade: Date.now(), online: true });
       } else {
-        ref.update({
-          ip: ip,
-          ultimaAtividade: agora,
-          online: true
-        });
+        ref.update({ ultimaAtividade: Date.now(), online: true });
       }
     });
-
-    // Atualiza a cada 30s (mantém "online agora")
     setInterval(() => {
-      const id = localStorage.getItem('farol_visitor_id');
-      if (id) {
-        db.ref('farol_visitas/' + id).update({
-          ultimaAtividade: Date.now(),
-          online: true
-        });
-      }
+      ref.update({ ultimaAtividade: Date.now(), online: true });
     }, 30000);
-
-    // Marca offline ao sair
     window.addEventListener('beforeunload', () => {
-      const id = localStorage.getItem('farol_visitor_id');
-      if (id) {
-        db.ref('farol_visitas/' + id).update({ online: false });
-      }
+      ref.update({ online: false });
     });
-
   } catch(e){ console.warn('Tracking off', e); }
-}
-trackVisita();
+})();
 
 // ============================================================
-// CUPONS E PRODUTOS
+// CUPONS E PRODUTOS (Com Túnel de Imagem para não bloquear)
 // ============================================================
 const CUPONS = {"FAROL10":0.10,"BEMVINDO15":0.15,"FAROL20":0.20};
 
 const produtos = [
-  {id:963,nome:"Gift Card MENSAL",cat:"Mensal",de:29.90,por:21.99,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/unitv-mensal-farol-247x343.png",cor:"#555"},
-  {id:965,nome:"Gift Card Trimestral",cat:"Trimestral",de:79.90,por:65.90,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/unitv-trimestral-farol-247x343.png",cor:"#555"},
-  {id:967,nome:"Gift Card Anual",cat:"Anual",de:199.90,por:165.90,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/unitv-anual-play-recargas-247x343.png",cor:"#555"},
-  {id:8274,nome:"Gift Card TV+EXPRESS – mensal",cat:"Mensal",de:30.00,por:22.90,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tve-mensal-1-247x343.png",cor:"#0f2b5c"},
-  {id:8273,nome:"Gift Card TV+EXPRESS- trimestral",cat:"Trimestral",de:75.00,por:59.90,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tve-trimestral-247x343.png",cor:"#0f2b5c"},
-  {id:1635,nome:"Gift Card TV+EXPRESS – Anual",cat:"Anual",de:180.00,por:150.98,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tve-anual-247x343.png",cor:"#0f2b5c"},
-  {id:972,nome:"Gift Card Eppi / flixx cine – Mensal",cat:"Mensal",de:null,por:19.98,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/eppi-mensal-1-247x343.png",cor:"#007f3d"},
-  {id:1452,nome:"Gift Card Eppi / flixx cine – Trimestral",cat:"Trimestral",de:65.00,por:59.99,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/eppi-trimestral-247x343.png",cor:"#007f3d"},
-  {id:8276,nome:"Gift Card Eppi / flixx cine – Anual",cat:"Anual",de:null,por:129.98,img:"https://farolentretenimento.com/wp-content/uploads/2021/03/eppi-anual-1-247x343.png",cor:"#007f3d"},
-  {id:1629,nome:"Gift Card nexaTV – Mensal",cat:"Mensal",de:null,por:22.98,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tvexpress-mensal.png",cor:"#4a0cb0"},
-  {id:1628,nome:"Gift Card nexa tv/ TVE – Anual",cat:"Anual",de:null,por:150.98,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tvexpress-anual-1.png",cor:"#4a0cb0"},
-  {id:1630,nome:"Gift Card nexa tv / TVE – trimestral",cat:"Trimestral",de:null,por:59.98,img:"https://farolentretenimento.com/wp-content/uploads/2024/10/tvexpress-mensal.png",cor:"#4a0cb0"}
+  {id:963,nome:"Gift Card MENSAL",cat:"Mensal",de:29.90,por:21.99,img:"https://images.weserv.nl/?url=farolentretenimento.com/wp-content/uploads/2021/03/unitv-mensal-farol-510x707.png",cor:"#555"},
+  {id:965,nome:"Gift Card Trimestral",cat:"Trimestral",de:79.90,por:65.90,img:"https://images.weserv.nl/?url=farolentretenimento.com/wp-content/uploads/2021/03/unitv-trimestral-farol-510x707.png",cor:"#555"},
+  {id:967,nome:"Gift Card Anual",cat:"Anual",de:199.90,por:165.90,img:"https://images.weserv.nl/?url=farolentretenimento.com/wp-content/uploads/2021/03/unitv-anual-play-recargas-510x707.png",cor:"#555"},
+  {id:8274,nome:"Gift Card TV+EXPRESS – mensal",cat:"Mensal",de:30.00,por:22.90,img:"https://images.weserv.nl/?url=farolentretenimento.com/wp-content/uploads/2024/10/tve-mensal-1-510x707.png",cor:"#0f2b5c"},
+  {id:8273,nome:"Gift Card TV+EXPRESS- trimestral",cat:"Trimestral",de:75.00,por:59.90,img:"https://images.weserv.nl/?url=farolentretenimento.com/wp-content/uploads/2024/10/tve-trimestral-510x707.png",cor:"#0f2b5c"},
+  {id:1635,nome:"Gift Card TV+EXPRESS – Anual",cat:"Anual",de:180.00,por:150.98,img:"https://images.weserv.nl/?url=farolentretenimento.com/wp-content/uploads/2024/10/tve-anual-510x707.png",cor:"#0f2b5c"},
+  {id:972,nome:"Gift Card Eppi / flixx cine – Mensal",cat:"Mensal",de:null,por:19.98,img:"https://images.weserv.nl/?url=farolentretenimento.com/wp-content/uploads/2021/03/eppi-mensal-1.png",cor:"#007f3d"},
+  {id:1452,nome:"Gift Card Eppi / flixx cine – Trimestral",cat:"Trimestral",de:65.00,por:59.99,img:"https://images.weserv.nl/?url=farolentretenimento.com/wp-content/uploads/2021/03/eppi-trimestral-1.png",cor:"#007f3d"},
+  {id:8276,nome:"Gift Card Eppi / flixx cine – Anual",cat:"Anual",de:null,por:129.98,img:"https://images.weserv.nl/?url=farolentretenimento.com/wp-content/uploads/2021/03/eppi-anual-1.png",cor:"#007f3d"},
+  {id:1629,nome:"Gift Card nexaTV – Mensal",cat:"Mensal",de:null,por:22.98,img:"https://images.weserv.nl/?url=farolentretenimento.com/wp-content/uploads/2024/10/tvexpress-mensal.png",cor:"#4a0cb0"},
+  {id:1628,nome:"Gift Card nexa tv/ TVE – Anual",cat:"Anual",de:null,por:150.98,img:"https://images.weserv.nl/?url=farolentretenimento.com/wp-content/uploads/2024/10/tvexpress-anual-1.png",cor:"#4a0cb0"},
+  {id:1630,nome:"Gift Card nexa tv / TVE – trimestral",cat:"Trimestral",de:null,por:59.98,img:"https://images.weserv.nl/?url=farolentretenimento.com/wp-content/uploads/2024/10/tvexpress-trimestral.png",cor:"#4a0cb0"}
 ];
 
 const brl = n => "R$ " + n.toFixed(2).replace(".", ",");
@@ -591,17 +562,18 @@ function updateCartUI(){
   if(descontoAtual > 0){
     descRow.style.display = "flex";
     document.getElementById("cartDesconto").textContent = `- ${brl(subtotal * descontoAtual)}`;
-  } else {
-    descRow.style.display = "none";
-  }
+  } else descRow.style.display = "none";
   const tbody = document.getElementById("cartTableBody");
   if(itens.length === 0){
-    tbody.innerHTML = `<tr><td colspan="2" style="text-align:center;padding:20px;color:#999">Seu carrinho está vazio.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="2" style="text-align:center;color:#999;padding:40px;">Carrinho vazio.</td></tr>`;
   } else {
-    tbody.innerHTML = itens.map(i => `<tr><td><strong>${i.nome}</strong></td><td style="text-align:right">${i.qty}</td></tr>`).join("");
+    tbody.innerHTML = itens.map(i => {
+      let thumbStyle = i.img ? `background-image:url('${i.img}');` : `background-color:${i.cor};`;
+      return `<tr><td><div style="display:flex;align-items:center;gap:15px;"><div class="cart-drawer-thumb" style="${thumbStyle}">${!i.img ? i.nome.split('–')[0] : ''}</div><div><h3 style="font-size:14px;font-weight:700;color:var(--heading);margin-bottom:4px;">${i.nome}</h3><div style="font-size:13px;color:var(--primary);font-weight:700;">${brl(i.preco)}</div></div></div></td><td><div style="display:flex;align-items:center;justify-content:flex-end;gap:10px;"><button style="width:30px;height:30px;border:1px solid var(--border);background:#fff;border-radius:5px;font-weight:700;cursor:pointer;" onclick="changeQty(${i.id}, -1)">−</button><span>${i.qty}</span><button style="width:30px;height:30px;border:1px solid var(--border);background:#fff;border-radius:5px;font-weight:700;cursor:pointer;" onclick="changeQty(${i.id}, 1)">+</button></div></td></tr>`;
+    }).join("");
   }
   localStorage.setItem("farol_cart", JSON.stringify(carrinho));
-  renderDrawer();
+  if(document.getElementById("cartDrawer").classList.contains("active")) renderDrawer();
 }
 function changeQty(id, delta){
   if(!carrinho[id]) return;
@@ -609,240 +581,282 @@ function changeQty(id, delta){
   if(carrinho[id].qty <= 0) delete carrinho[id];
   updateCartUI();
 }
-
-// ============================================================
-// CUPOM
-// ============================================================
 function aplicarCupom(){
-  const input = document.getElementById("cupomInput").value.trim().toUpperCase();
-  if(!input){ showToast("Digite um cupom."); return; }
-  if(CUPONS[input] !== undefined){
-    descontoAtual = CUPONS[input];
-    cupomAplicado = input;
-    document.getElementById("cupomInput").value = input;
-    showToast(`Cupom ${input} aplicado! ${descontoAtual*100}% OFF`);
+  const codigo = document.getElementById("cupomInput").value.trim().toUpperCase();
+  if(!codigo){ showToast("Digite um código"); return; }
+  if(CUPONS[codigo]){
+    descontoAtual = CUPONS[codigo];
+    cupomAplicado = codigo;
+    showToast(`Cupom ${codigo}: ${descontoAtual*100}% OFF`);
     updateCartUI();
-  } else {
-    showToast("Cupom inválido.");
-  }
+  } else showToast("Cupom inválido");
 }
 
 // ============================================================
-// CHECKOUT E PIX
+// MÁSCARAS
 // ============================================================
-const form = document.getElementById("checkoutForm");
+document.getElementById('cpf').addEventListener('input', function(){
+  let v = this.value.replace(/\D/g, '').slice(0, 11);
+  v = v.replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+  this.value = v;
+});
+document.getElementById('telefone').addEventListener('input', function(){
+  let v = this.value.replace(/\D/g, '').slice(0, 11);
+  if(v.length <= 10) v = v.replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{4})(\d)/, '$1-$2');
+  else v = v.replace(/^(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d)/, '$1-$2');
+  this.value = v;
+});
+document.getElementById('cep').addEventListener('input', function(){
+  let v = this.value.replace(/\D/g, '').slice(0, 8);
+  v = v.replace(/(\d{5})(\d)/, '$1-$2');
+  this.value = v;
+});
 
-function mascaraCPF(v) {
-  v = v.replace(/\D/g, "");
-  if (v.length > 11) v = v.slice(0, 11);
-  v = v.replace(/(\d{3})(\d)/, "$1.$2");
-  v = v.replace(/(\d{3})(\d)/, "$1.$2");
-  v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-  return v;
-}
-function mascaraTel(v) {
-  v = v.replace(/\D/g, "");
-  if (v.length > 11) v = v.slice(0, 11);
-  v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
-  v = v.replace(/(\d{5})(\d)/, "$1-$2");
-  return v;
-}
-document.getElementById("cpf").addEventListener("input", e => e.target.value = mascaraCPF(e.target.value));
-document.getElementById("telefone").addEventListener("input", e => e.target.value = mascaraTel(e.target.value));
-
-function validaCPF(cpf) {
-  cpf = cpf.replace(/\D/g, "");
-  if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
-  let soma = 0, resto;
-  for (let i = 1; i <= 9; i++) soma += parseInt(cpf.substring(i-1, i)) * (11 - i);
-  resto = (soma * 10) % 11;
-  if (resto === 10 || resto === 11) resto = 0;
-  if (resto !== parseInt(cpf.substring(9, 10))) return false;
+// ============================================================
+// VALIDADORES
+// ============================================================
+function validarCPF(cpf){
+  cpf = cpf.replace(/\D/g, '');
+  if(cpf.length !== 11) return false;
+  if(/^(\d)\1{10}$/.test(cpf)) return false;
+  let soma = 0;
+  for(let i=0;i<9;i++) soma += parseInt(cpf[i]) * (10-i);
+  let resto = (soma*10) % 11;
+  if(resto === 10) resto = 0;
+  if(resto !== parseInt(cpf[9])) return false;
   soma = 0;
-  for (let i = 1; i <= 10; i++) soma += parseInt(cpf.substring(i-1, i)) * (12 - i);
-  resto = (soma * 10) % 11;
-  if (resto === 10 || resto === 11) resto = 0;
-  if (resto !== parseInt(cpf.substring(10, 11))) return false;
+  for(let i=0;i<10;i++) soma += parseInt(cpf[i]) * (11-i);
+  resto = (soma*10) % 11;
+  if(resto === 10) resto = 0;
+  if(resto !== parseInt(cpf[10])) return false;
   return true;
 }
+function validarTelefone(tel){
+  const v = tel.replace(/\D/g, '');
+  if(v.length < 10 || v.length > 11) return false;
+  const ddd = parseInt(v.substring(0,2));
+  if(ddd < 11 || ddd > 99) return false;
+  if(v.length === 11 && v[2] !== '9') return false;
+  if(v.length === 10 && (v[2] === '0' || v[2] === '1')) return false;
+  return true;
+}
+function validarCEP(cep){ return cep.replace(/\D/g,'').length === 8; }
+function validarNome(nome){ return /^[A-Za-zÀ-ÿ\s'-]{2,}$/.test(nome.trim()); }
+function validarEmail(email){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim()); }
 
-// Utils PIX
-function calcularCRC16(payload) {
+function marcarErro(id, msg){
+  const el = document.getElementById(id);
+  el.style.borderColor = '#e31e24';
+  el.style.background = '#fff5f5';
+  const anterior = el.parentNode.querySelector('.erro-msg');
+  if(anterior) anterior.remove();
+  const span = document.createElement('span');
+  span.className = 'erro-msg';
+  span.textContent = msg;
+  el.parentNode.appendChild(span);
+}
+function limparErro(id){
+  const el = document.getElementById(id);
+  el.style.borderColor = '';
+  el.style.background = '';
+  const msg = el.parentNode.querySelector('.erro-msg');
+  if(msg) msg.remove();
+}
+
+// ============================================================
+// PIX — GERAÇÃO
+// ============================================================
+function calcularCRC16(payload){
   let crc = 0xFFFF;
-  for (let i = 0; i < payload.length; i++) {
+  for(let i = 0; i < payload.length; i++){
     crc ^= payload.charCodeAt(i) << 8;
-    for (let j = 0; j < 8; j++) {
+    for(let j = 0; j < 8; j++){
       crc = (crc & 0x8000) ? ((crc << 1) ^ 0x1021) : (crc << 1);
       crc &= 0xFFFF;
     }
   }
   return crc.toString(16).toUpperCase().padStart(4, '0');
 }
-function campoPix(id, valor) {
-  return id + String(valor.length).padStart(2, '0') + valor;
+function campoPix(id, valor){ return id + String(valor.length).padStart(2, '0') + valor; }
+
+function gerarPayloadPix({ key, name, city, amount, txid }){
+  const gui = 'br.gov.bcb.pix';
+  const nome = name.substring(0, 25).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase();
+  const cidade = city.substring(0, 15).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase();
+  const tid = (txid || '***').substring(0, 25);
+  let payload = '';
+  payload += campoPix('00', '01');
+  payload += campoPix('26', campoPix('00', gui) + campoPix('01', key));
+  payload += campoPix('52', '0000');
+  payload += campoPix('53', '986');
+  if(amount) payload += campoPix('54', Number(amount).toFixed(2));
+  payload += campoPix('58', 'BR');
+  payload += campoPix('59', nome);
+  payload += campoPix('60', cidade);
+  payload += campoPix('62', campoPix('05', tid));
+  payload += '6304';
+  payload += calcularCRC16(payload);
+  return payload;
 }
 
-async function finalizarCompra(e) {
+// ============================================================
+// FINALIZAR COMPRA → GERA PIX
+// ============================================================
+async function finalizarCompra(e){
   e.preventDefault();
-  
-  const nome = document.getElementById("nome").value.trim();
-  const sobrenome = document.getElementById("sobrenome").value.trim();
-  const cpf = document.getElementById("cpf").value.trim();
-  const telefone = document.getElementById("telefone").value.trim();
-  const email = document.getElementById("email").value.trim();
 
-  // ✅ Validação SEM endereço
-  if (!nome || !sobrenome || !cpf || !telefone || !email) {
-    showToast("Preencha todos os campos obrigatórios (*).");
+  const nome = document.getElementById('nome').value.trim();
+  const sobrenome = document.getElementById('sobrenome').value.trim();
+  const cpf = document.getElementById('cpf').value.trim();
+  const telefone = document.getElementById('telefone').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const cep = document.getElementById('cep').value.trim();
+  const endereco = document.getElementById('endereco').value.trim();
+  const numero = document.getElementById('numero').value.trim();
+  const complemento = document.getElementById('complemento').value.trim();
+  const bairro = document.getElementById('bairro').value.trim();
+  const cidade = document.getElementById('cidade').value.trim();
+  const estado = document.getElementById('estado').value.trim().toUpperCase();
+
+  ['nome','sobrenome','cpf','telefone','email','cep','endereco','numero','bairro','cidade','estado'].forEach(limparErro);
+
+  let erro = false, primeiroErro = null;
+  const checar = (id, cond, msg) => {
+    if(!cond){ marcarErro(id, msg); erro = true; if(!primeiroErro) primeiroErro = id; }
+  };
+  checar('nome', validarNome(nome), 'Nome inválido');
+  checar('sobrenome', validarNome(sobrenome), 'Sobrenome inválido');
+  checar('cpf', validarCPF(cpf), 'CPF inválido');
+  checar('telefone', validarTelefone(telefone), 'Telefone inválido');
+  checar('email', validarEmail(email), 'E-mail inválido');
+  checar('cep', validarCEP(cep), 'CEP inválido');
+  checar('endereco', endereco.length >= 3, 'Informe o endereço');
+  checar('numero', numero.length > 0, 'Informe o número');
+  checar('bairro', bairro.length >= 2, 'Informe o bairro');
+  checar('cidade', cidade.length >= 2, 'Informe a cidade');
+  checar('estado', /^[A-Z]{2}$/.test(estado), 'UF inválida');
+
+  if(erro){
+    showToast('Corrija os campos em vermelho');
+    document.getElementById(primeiroErro).scrollIntoView({behavior:'smooth', block:'center'});
+    document.getElementById(primeiroErro).focus();
     return;
   }
-  if (!validaCPF(cpf)) {
-    showToast("CPF inválido. Verifique os números.");
-    return;
-  }
+  if(Object.keys(carrinho).length === 0){ showToast('Carrinho vazio!'); return; }
 
-  const itens = Object.values(carrinho);
-  const subtotal = itens.reduce((s,i) => s + i.qty * i.preco, 0);
+  const subtotal = Object.values(carrinho).reduce((s,i) => s + i.qty * i.preco, 0);
   const totalFinal = subtotal * (1 - descontoAtual);
-  const telLimpo = telefone.replace(/\D/g, "");
-  const txid = orderNum.toString();
-  
-  const btn = document.querySelector(".btn-checkout-final");
-  btn.disabled = true;
-  btn.textContent = "Gerando PIX...";
+  const telLimpo = telefone.replace(/\D/g, '');
+
+  let pixCfg;
+  try {
+    const snap = await db.ref('buser_pix_cfg').once('value');
+    pixCfg = snap.val();
+  } catch(e){
+    console.error('Erro ao buscar config PIX', e);
+  }
+  if(!pixCfg || !pixCfg.key){
+    showToast('Loja indisponível. Tente novamente em minutos.', 'error');
+    return;
+  }
+
+  const payload = gerarPayloadPix({
+    key: pixCfg.key,
+    name: pixCfg.name || 'FAROL',
+    city: pixCfg.city || 'CURITIBA',
+    amount: totalFinal,
+    txid: orderNum
+  });
+
+  pixAtual = { payload, valor: totalFinal, txid: orderNum, telLimpo };
+
+  const pedido = {
+    txid: orderNum.toString(),
+    nome: nome + " " + sobrenome,
+    cpf: cpf,
+    whatsapp: telLimpo,
+    email: email,
+    telefone: telefone,
+    endereco: `${endereco}, ${numero}${complemento ? ' - ' + complemento : ''}`,
+    bairro: bairro,
+    cidade: cidade,
+    estado: estado,
+    cep: cep,
+    payment: 'PIX',
+    amount: totalFinal,
+    subtotal: subtotal,
+    desconto: subtotal * descontoAtual,
+    cupom: cupomAplicado,
+    status: 'pending',
+    geradoEm: Date.now(),
+    pixGeradoEm: Date.now(),
+    pixCopiado: false,
+    pixPayload: payload,
+    produtos: Object.values(carrinho).map(i => ({id: i.id, nome: i.nome, preco: i.preco, qty: i.qty}))
+  };
 
   try {
-    const snap = await db.ref('farol_pix_cfg').once('value');
-    const cfg = snap.val();
-    if (!cfg || !cfg.key) {
-      throw new Error("A loja ainda não configurou a chave PIX. Avise o administrador.");
-    }
-
-    const gui = 'br.gov.bcb.pix';
-    const name = (cfg.name || 'FAROL').substring(0, 25).normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    const city = (cfg.city || 'CURITIBA').substring(0, 15).normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    
-    let payload = '';
-    payload += campoPix('00', '01');
-    payload += campoPix('26', campoPix('00', gui) + campoPix('01', cfg.key));
-    payload += campoPix('52', '0000');
-    payload += campoPix('53', '986');
-    payload += campoPix('54', Number(totalFinal).toFixed(2));
-    payload += campoPix('58', 'BR');
-    payload += campoPix('59', name);
-    payload += campoPix('60', city);
-    payload += campoPix('62', campoPix('05', txid));
-    payload += '6304';
-    payload += calcularCRC16(payload);
-
-    pixAtual = { payload, valor: totalFinal, orderNum: txid };
-
-    // ✅ Objeto do pedido SEM endereço (mas mantém IP do visitante)
-    const pedidoObj = {
-      txid: txid,
-      nome: nome + " " + sobrenome,
-      cpf: cpf,
-      telefone: telefone,
-      whatsapp: telefone,
-      email: email,
-      produtos: itens,
-      amount: totalFinal,
-      status: "pending",
-      geradoEm: Date.now(),
-      cupom: cupomAplicado,
-      ip: localStorage.getItem('farol_visitor_ip') || 'desconhecido',
-      visitorId: localStorage.getItem('farol_visitor_id') || 'anonimo'
-    };
-
-    await db.ref(`buser_pedidos/${telLimpo}/pix/${txid}`).set(pedidoObj);
-    
-    // NOTIFICA O PAINEL QUE O PIX FOI GERADO
-    db.ref('farol_notificacoes').push({ tipo: 'pix_gerado', txid: txid, valor: totalFinal, data: Date.now() });
-
-    document.getElementById("pixOrderNum").textContent = txid;
-    document.getElementById("pixOrderNum2").textContent = txid;
-    document.getElementById("pixValor").textContent = brl(totalFinal);
-    document.getElementById("pixCopiaBox").textContent = payload;
-    document.getElementById("pixQrBox").innerHTML = "";
-    new QRCode(document.getElementById("pixQrBox"), { text: payload, width: 200, height: 200 });
-    
-    const btnCopy = document.getElementById("btnCopiarPix");
-    btnCopy.textContent = "📋 Copiar código PIX";
-    btnCopy.classList.remove("copiado");
-
-    esconderTodas();
-    document.getElementById("pixScreen").classList.add("active");
-    window.scrollTo(0,0);
-
-    carrinho = {};
-    localStorage.removeItem("farol_cart");
-    updateCartUI();
-
-  } catch (err) {
-    console.error(err);
-    showToast(err.message || "Erro ao processar. Tente novamente.");
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "GERAR PIX";
+    await db.ref(`buser_pedidos/${telLimpo}/pix/${orderNum}`).set(pedido);
+    console.log("Pedido salvo:", orderNum);
+  } catch(err) {
+    console.error("Erro ao salvar pedido:", err);
+    showToast('Erro ao registrar pedido. Tente novamente.', 'error');
+    return;
   }
+
+  mostrarTelaPix(payload, totalFinal, orderNum);
+
+  carrinho = {};
+  descontoAtual = 0;
+  cupomAplicado = "";
+  updateCartUI();
+  localStorage.removeItem("farol_order_num");
 }
 
-// ============================================================
-// FUNÇÕES PIX E UTILS
-// ============================================================
+function mostrarTelaPix(payload, valor, num){
+  esconderTodas();
+  document.getElementById("pixScreen").classList.add("active");
+  document.getElementById("pixOrderNum").textContent = num;
+  document.getElementById("pixOrderNum2").textContent = num;
+  document.getElementById("pixValor").textContent = brl(valor);
+  document.getElementById("pixCopiaBox").textContent = payload;
 
-function copiarPix(){
+  const qrBox = document.getElementById("pixQrBox");
+  qrBox.innerHTML = '';
+  new QRCode(qrBox, { text: payload, width: 220, height: 220, colorDark: "#000", colorLight: "#fff" });
+
+  document.getElementById("btnCopiarPix").textContent = "📋 Copiar código PIX";
+  document.getElementById("btnCopiarPix").classList.remove("copiado");
+  window.scrollTo(0,0);
+}
+
+async function copiarPix(){
   if(!pixAtual) return;
-  
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(pixAtual.payload).then(() => {
-      exibirFeedbackCopia();
-    }).catch(err => {
-      copiarFallback();
-    });
-  } else {
-    copiarFallback();
-  }
-}
-
-function copiarFallback() {
-  const textArea = document.createElement("textarea");
-  textArea.value = pixAtual.payload;
-  textArea.style.position = "fixed";
-  textArea.style.opacity = "0";
-  document.body.appendChild(textArea);
-  textArea.focus();
-  textArea.select();
   try {
-    document.execCommand('copy');
-    exibirFeedbackCopia();
-  } catch (err) {
-    showToast("Não foi possível copiar automaticamente.");
+    await navigator.clipboard.writeText(pixAtual.payload);
+    document.getElementById("btnCopiarPix").textContent = "✓ Copiado!";
+    document.getElementById("btnCopiarPix").classList.add("copiado");
+    showToast("Código PIX copiado!");
+
+    try {
+      await db.ref(`buser_pedidos/${pixAtual.telLimpo}/pix/${pixAtual.txid}`).update({
+        pixCopiado: true,
+        pixCopiadoEm: Date.now()
+      });
+    } catch(e){ console.warn('Erro ao registrar cópia', e); }
+
+    setTimeout(() => {
+      document.getElementById("btnCopiarPix").textContent = "📋 Copiar novamente";
+    }, 3000);
+  } catch(e){
+    showToast('Erro ao copiar. Selecione manualmente.', 'error');
   }
-  document.body.removeChild(textArea);
 }
 
-function exibirFeedbackCopia() {
-  const btn = document.getElementById("btnCopiarPix");
-  const valorFormatado = brl(pixAtual.valor);
-  
-  // NOTIFICA O PAINEL QUE O PIX FOI COPIADO
-  db.ref('farol_notificacoes').push({ tipo: 'pix_copiado', txid: pixAtual.orderNum, valor: pixAtual.valor, data: Date.now() });
-
-  btn.textContent = `✅ Copiado: ${valorFormatado}`;
-  btn.classList.add("copiado");
-  
-  showToast(`✅ Código PIX de ${valorFormatado} copiado com sucesso!`);
-
-  setTimeout(() => {
-    btn.textContent = "📋 Copiar código PIX";
-    btn.classList.remove("copiado");
-  }, 4000);
-}
-
-function showToast(msg){
+function showToast(msg, tipo = 'info'){
   const t = document.getElementById("toast");
   t.textContent = msg;
+  t.style.background = tipo === 'error' ? '#d81b60' : '#222';
   t.classList.add("show");
   setTimeout(() => t.classList.remove("show"), 3000);
 }
